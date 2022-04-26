@@ -64,7 +64,7 @@ To make it a complete executable, one must link object files, with one of them c
 
 \subsection{Random Access File I/O}
 \begin{itemize}
-    \item \textbf{int ftell(FILE *file\_pointer);}
+    \item \textbf{int ftell(FILE *file\_pointer);}\\
     Returns current offset from the beginning of the file (SEEK\_SET) or -1 in case of error.
     \item \textbf{int fseek(FILE *fp, long int offset, int whence);}\\
     Whence values include
@@ -115,6 +115,61 @@ Declaration is announcing the properties of var (no memory allocation), definiti
 \end{itemize}
 Put pure declaration (struct, func prototype, extern) outside of the func, put definition inside func.
 
-\subsection{Arrays in Struct}
+\subsection{Initializing/Assigning Elements in Struct}
+\begin{algorithmic}
+        \item struct my\_data = \{\\
+        $\indent$ int age;\\
+        $\indent$ int random\_stuffs[2];\\
+    \};\\
+\end{algorithmic}
+When initializing, just to it normally.
+\begin{algorithmic}
+    \item struct my\_data my\_var = \{ 12, \{ 3, 4 \} \}
+\end{algorithmic}
+Usually, assigning elements are done individually
+\begin{algorithmic}
+    \item struct my\_data my\_var = \{ 122 , \{ 33 , 44 \} \}; /* Oh no mistakes */\\
+    my\_var.age = 12;\\
+    my\_var.random\_stuffs[0] = 3;\\
+    my\_var.random\_stuffs[1] = 4;
+\end{algorithmic}
+In C99, you can do it all at once with compound literal.
+\begin{algorithmic}
+    \item my\_var = (struct my\_data) \{ 12, \{ 3, 4 \} \}
+\end{algorithmic}
+
+\section{Memory}
+
+\subsection{Array and String}
+\begin{itemize}
+    \item When a global array is initialized, or a local array is partially initialized, any non-initialized elements are 0.
+    \item \textbf{Use strncpy(str1, str2, num), with last arg being sizeof(str1)} (in stack allocated memory settings).
+    \item strcmp(str1, str2) returns 0 if they are the same, positive number if str2 comes before str1, negative if str1 comes before str2.
+\end{itemize}
+
+\subsection{Memory Map}
+Take the L
+
+\subsection{Padding}
+Structure is padded in C when smaller size variable is followed by bigger size variable. 
+Padding of sizeof(bigger\_var) - sizeof(smaller\_var) will be added in between for a faster access.
+\begin{algorithmic}
+    \item struct example \{\\
+        $\indent$ char a; /* 1 bytes */\\
+        $\indent$ char b; /* 1 bytes */\\
+        $\indent$ int c; /* 4 bytes */\\
+        $\indent$ /* Prev. element adding up to 6, thus 2 bytes of padding */\\
+        $\indent$ struct example *next /* 8 bytes */\\
+    \};
+\end{algorithmic}
+Size of struct example is 16 bytes (in 64 bit system). Remember that the size of structure should be a multiple of the biggest variable.
+
+\subsection{Binary File I/O}
+\begin{itemize}
+    \item \textbf{int fwrite(void *ptr, int size, int num, FILE *fp);}\\
+    Usually, write one item at a time. having target structure as the 1st arg, sizeof(struct) as the second arg, and 1 as the 3rd arg.
+    \item \textbf{int fread(void *ptr, int size, int num, FILE *fp);}\\
+    Same thing as fwrite, just reading. Oh right, did you know that when you read long, it's stored in reverse order? Damn like it should totally be on the exam because no one will get it right.
+\end{itemize}
 
 \end{document}
