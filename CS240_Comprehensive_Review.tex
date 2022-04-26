@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage{algpseudocode}
 
 \topmargin=-0.45in
 \evensidemargin=0in
@@ -17,6 +18,7 @@
 \maketitle
 
 \section{Compiling and Linking}
+
 \subsection{Gcc Flags}
 \begin{itemize}
     \item \textit{-c} Compile file into object file
@@ -28,11 +30,13 @@
     \item \textit{-ANSI} Adhere to ANSI std
     \item \textit{-std=C99} Adhere to C99 std
 \end{itemize}
+
 \subsection{Linking}
 Object file contains binary code, symbol tables, and is a compiled form of a C module.
 To make it a complete executable, one must link object files, with one of them containing main().
 
 \section{File I/O}
+
 \subsection{Essentials}
 \begin{itemize}
     \item FILE *fopen(char *file\_name, char *mode);\\
@@ -41,16 +45,75 @@ To make it a complete executable, one must link object files, with one of them c
     It does not set the file ptr to NULL, so you have to manually set it to NULL. Return val check isn't necessary in this class.
     \item \textbf{int fprinf(FILE *stream, const char *format, \dots);}
     \item \textbf{int fscanf(FILE *stream, const char *format, \dots);}
+    \item int access(char *file\_name, int mode);\\
+    Used to check if file can be accessed in "R\_OK", "W\_OK", or "F\_OK" (check for existence) mode.
+    \item int feof(FILE *file\_pointer);\\
+    Returns non-zero if EOF reached.
+    \item int ferror(FILE *file\_pointer);\\
+    Returns 0 if error occurs (e.g disk space full).
 \end{itemize}
-\subsection{Binary File Related}
-\begin{itemize}
-    \item 
-\end{itemize}
-\subsection{Key notes with fscanf()}
+
+\subsection{Notes with fscanf()}
 \begin{itemize}
     \item Utilize \%[] (\%[0-9A-z] \%[\^A-z])
+    \item \textbf{Field width specifier (e.g \%49s \%49[A-z]). Always one less than the buffer size to account for NUL terminator.}
+    \item Assigns variables to pointers; use \& symbol for non-strings.
+    \item Returns number of successfully read variables; Check for error using the return value.
 \end{itemize}
-\pagebreak
 
+\subsection{Random Access File I/O}
+\begin{itemize}
+    \item \textbf{int ftell(FILE *file\_pointer);}
+    Returns current offset from the beginning of the file (SEEK\_SET) or -1 in case of error.
+    \item \textbf{int fseek(FILE *fp, long int offset, int whence);}\\
+    Whence values include
+    \begin{itemize}
+        \item SEEK\_SET: Offset relative to beginning of the file 
+        \item SEEK\_CUR: Offset relative to the current position
+        \item SEEK\_END: Offset relative to the end of the file
+    \end{itemize}
+    \item Example of finding how long the file is:
+    \begin{algorithmic}
+        \item fseek(fp, 0, SEEK\_END);
+        \item int len = ftell(fp);
+        \item fseek(fp, 0, SEEK\_SET);
+    \end{algorithmic}
+\end{itemize}
+
+\section{Struct and Typedef}
+
+\subsection{Some Syntax}
+\begin{itemize}
+    \item Typedef and struct definition:
+    \begin{algorithmic}
+        \item typedef struct my\_data \{\\
+            $\indent$ int age;\\
+        \} my\_data\_t;
+    \end{algorithmic}
+    \item Struct definition and declaration:
+    \begin{algorithmic}
+        \item struct my\_data \{\\
+            $\indent$ int age;\\
+        \} my\_var = \{ 19 \};
+    \end{algorithmic}
+\end{itemize}
+
+\subsection{Declaration vs Definition}
+Declaration is announcing the properties of var (no memory allocation), definition is allocating storages for a var.
+\begin{itemize}
+    \item Declaration:
+    \begin{algorithmic}
+        \item struct my\_data \{\\
+            $\indent$ int age;\\
+        \};
+    \end{algorithmic}
+    \item Definition and initialization:
+    \begin{algorithmic}
+        \item struct my\_data my\_var = \{ 19 \};
+    \end{algorithmic}
+\end{itemize}
+Put pure declaration (struct, func prototype, extern) outside of the func, put definition inside func.
+
+\subsection{Arrays in Struct}
 
 \end{document}
