@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\title{CS240 Comprehensive Review}
+\author{Theo Park}
+\date{3 May 2022}
+
+\begin{document}
+
+\maketitle
+
+\section{Compiling and Linking}
+\subsection{Gcc Flags}
+\begin{itemize}
+    \item \textit{-c} Compile file into object file
+    \item \textit{-g} Debugging symbols
+    \item \textbf{\textit{-Wall}} Include ALL Warning
+    \item \textbf{\textit{-Werror}} Turn wanings into errors
+    \item \textbf{\textit{-O1, -O2, -O3}} Optimize output code
+    \item \textbf{\textit{-o filename}} Output to filename
+    \item \textit{-ANSI} Adhere to ANSI std
+    \item \textit{-std=C99} Adhere to C99 std
+\end{itemize}
+\subsection{Linking}
+Object file contains binary code, symbol tables, and is a compiled form of a C module.
+To make it a complete executable, one must link object files, with one of them containing main().
+
+\section{File I/O}
+\subsection{Essentials}
+\begin{itemize}
+    \item FILE *fopen(char *file\_name, char *mode);\\
+    Modes are "r", "w", and "a" (append). Returns file ptr on success, NULL on unsuccess, so one must check the return val of fopen().
+    \item int fclose(FILE *file\_pointer);\\
+    It does not set the file ptr to NULL, so you have to manually set it to NULL. Return val check isn't necessary in this class.
+    \item \textbf{int fprinf(FILE *stream, const char *format, \dots);}
+    \item \textbf{int fscanf(FILE *stream, const char *format, \dots);}
+\end{itemize}
+\subsection{Binary File Related}
+\begin{itemize}
+    \item 
+\end{itemize}
+\subsection{Key notes with fscanf()}
+\begin{itemize}
+    \item Utilize \%[] (\%[0-9A-z] \%[\^A-z])
+\end{itemize}
+\pagebreak
+
+
+\end{document}
