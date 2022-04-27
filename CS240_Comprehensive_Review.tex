@@ -56,7 +56,7 @@ To make it a complete executable, one must link object files, with one of them c
 
 \subsection{Notes with fscanf()}
 \begin{itemize}
-    \item Utilize \%[] (\%[0-9A-z] \%[\^A-z])
+    \item Utilize \%[] (\%[0-9A-z] \%[\^{}A-z])
     \item \textbf{Field width specifier (e.g \%49s \%49[A-z]). Always one less than the buffer size to account for NUL terminator.}
     \item Assigns variables to pointers; use \& symbol for non-strings.
     \item Returns number of successfully read variables; Check for error using the return value.
@@ -170,6 +170,58 @@ Size of struct example is 16 bytes (in 64 bit system). Remember that the size of
     Usually, write one item at a time. having target structure as the 1st arg, sizeof(struct) as the second arg, and 1 as the 3rd arg.
     \item \textbf{int fread(void *ptr, int size, int num, FILE *fp);}\\
     Same thing as fwrite, just reading. Oh right, did you know that when you read long, it's stored in reverse order? Damn like it should totally be on the exam because no one will get it right.
+    \item One more tip: If you want to know the offset of the struct you just read, do
+    \begin{algorithmic}
+        \item ftell(fp) / sizeof(struct example) - 1;
+    \end{algorithmic}
+\end{itemize}
+
+\section{Struct Wannabes}
+
+\subsection{Bitfields}
+You can create fields within struct that do not contain round number of bits.
+\begin{algorithmic}
+    \item  struct my\_bitfields \{\\
+        $\indent$ unsigned int sign: 1;\\
+        $\indent$ unsigned int exp: 11;\\
+        \};
+\end{algorithmic}
+Have no clue why this is useful.
+
+\subsection{Union}
+Declare just like struct
+\begin{algorithmic}
+    \item union my\_union \{\\
+        $\indent$ int combined\_bytes;\\
+        $\indent$ char four\_bytes[4];\\
+    \};
+\end{algorithmic}
+If you don't specify, it assumes that you're initializing the first field. C99 has designated initializer. 
+\begin{algorithmic}
+    \item union my\_union my\_var = \{ .four\_bytes = \{ a, b, c, d \} \};
+\end{algorithmic}
+
+\subsection{Enum}
+Attaching a label to a value. You can either assign a value or not. \textbf{Not semicolon, use commas}.
+\begin{algorithmic}
+    \item enum color \{\\
+        $\indent$ TEAL,\\
+        $\indent$ TURQUOISE = 4,\\
+    \};
+    \item enum color my\_fav\_color = TURQUOISE;
+    \item enum color my\_2nd\_fav = TEAL;
+    \item printf("My fav color is \%d$\backslash$n", TURQUOISE); /* Will print out 4 */
+\end{algorithmic}
+
+\subsection{Bitwise Operators}
+I know this doesn't belong here but I hate it and didn't want to give it a new section.
+\begin{itemize}
+    \item \& $\mid$ \^{} $\sim$
+    \item Shift operator $\ll$ $\gg$\\
+    Every shift left is equivalent to multiplication by two.
+    \begin{algorithmic}
+        \item y = x $\ll$ 4 /* Equivalent to y = x * $2^4$ */
+    \end{algorithmic}
 \end{itemize}
 
 \end{document}
