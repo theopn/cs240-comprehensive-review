@@ -4,6 +4,34 @@
 \usepackage{soul}
 \usepackage{bookman}
 
+% https://tex.stackexchange.com/questions/348651/c-code-to-add-in-the-document %
+\usepackage{xcolor}
+\usepackage{listings}
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    %basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    %keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \topmargin=-0.45in
 \evensidemargin=0in
 \oddsidemargin=0in
@@ -81,7 +109,7 @@ To make it a complete executable, one must link object files, with one of them c
         \item SEEK\_END: Offset relative to the end of the file
     \end{itemize}
     \item Example of finding how long the file is:
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \item fseek(fp, 0, SEEK\_END);
         \item int len = ftell(fp);
         \item fseek(fp, 0, SEEK\_SET);
@@ -93,57 +121,57 @@ To make it a complete executable, one must link object files, with one of them c
 \subsection{Some Syntax}
 \begin{itemize}
     \item Typedef and struct definition:
-    \begin{algorithmic}
-        \item typedef struct my\_data \{\\
-            $\indent$ int age;\\
-        \} my\_data\_t;
-    \end{algorithmic}
+    \begin{lstlisting}[style=CStyle]
+        typedef struct my_data {
+            int age;
+        } my_data_t;
+    \end{lstlisting}
     \item Struct definition and declaration:
-    \begin{algorithmic}
-        \item struct my\_data \{\\
-            $\indent$ int age;\\
-        \} my\_var = \{ 19 \};
-    \end{algorithmic}
+    \begin{lstlisting}[style=CStyle]
+        struct my_data {
+            int age;
+        } my_var = { 19 };
+    \end{lstlisting}
 \end{itemize}
 
 \subsection{Declaration vs Definition}
 Declaration is announcing the properties of var (no memory allocation), definition is allocating storages for a var.
 \begin{itemize}
     \item Declaration:
-    \begin{algorithmic}
-        \item struct my\_data \{\\
-            $\indent$ int age;\\
-        \};
-    \end{algorithmic}
+    \begin{lstlisting}[style=CStyle]
+        struct my_data {
+            int age;
+        };
+    \end{lstlisting}
     \item Definition and initialization:
-    \begin{algorithmic}
-        \item struct my\_data my\_var = \{ 19 \};
-    \end{algorithmic}
+    \begin{lstlisting}[style=CStyle]
+        struct my_data my_var = { 19 };
+    \end{lstlisting}
 \end{itemize}
 Put pure declaration (struct, func prototype, extern) outside of the func, put definition inside func.
 
 \subsection{Initializing/Assigning Elements in Struct}
-\begin{algorithmic}
-        \item struct my\_data = \{\\
-        $\indent$ int age;\\
-        $\indent$ int random\_stuffs[2];\\
-    \};\\
-\end{algorithmic}
-When initializing, just to it normally.
-\begin{algorithmic}
-    \item struct my\_data my\_var = \{ 12, \{ 3, 4 \} \}
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    struct my_data {
+        int age;
+        int random_stuffs[2];
+    };
+\end{lstlisting}
+Initialization is what you expect.
+\begin{lstlisting}[style=CStyle]
+    struct my_data my_var = { 12, { 3, 4 } };
+\end{lstlisting}
 Usually, assigning elements are done individually
-\begin{algorithmic}
-    \item struct my\_data my\_var = \{ 122 , \{ 33 , 44 \} \}; /* Oh no mistakes */\\
-    my\_var.age = 12;\\
-    my\_var.random\_stuffs[0] = 3;\\
-    my\_var.random\_stuffs[1] = 4;
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    struct my_data my_var = { 122, { 33, 44 } }; /* Oh no mistakes */
+    my_var.age = 12;
+    my_var.random_stuffs[0] = 3;
+    my_var.random_stuffs[1] = 4;
+\end{lstlisting}
 In C99, you can do it all at once with compound literal.
-\begin{algorithmic}
-    \item my\_var = (struct my\_data) \{ 12, \{ 3, 4 \} \}
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    my_var = (struct my_data) { 12, { 3, 4 } };
+\end{lstlisting}
 
 \section{Memory}
 
@@ -160,15 +188,15 @@ Take the L
 \subsection{Padding}
 Structure is padded in C when smaller size variable is followed by bigger size variable. 
 Padding of sizeof(bigger\_var) - sizeof(smaller\_var) will be added in between for a faster access.
-\begin{algorithmic}
-    \item struct example \{\\
-        $\indent$ char a; /* 1 bytes */\\
-        $\indent$ char b; /* 1 bytes */\\
-        $\indent$ int c; /* 4 bytes */\\
-        $\indent$ /* Prev. element adding up to 6, thus 2 bytes of padding */\\
-        $\indent$ struct example *next /* 8 bytes */\\
-    \};
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    struct example {
+        char a; /* 1 bytes */
+        char b; /* 1 bytes */
+        int c; /* 4 bytes */
+        /* Prev. element adding up to 6, thus 2 bytes of padding */
+        struct example *next; /* 8 bytes */
+    };
+\end{lstlisting}
 Size of struct example is 16 bytes (in 64 bit system). Remember that the size of structure should be a multiple of the biggest variable.
 
 \subsection{Binary File I/O}
@@ -178,7 +206,7 @@ Size of struct example is 16 bytes (in 64 bit system). Remember that the size of
     \item \textbf{int fread(void *ptr, int size, int num, FILE *fp);}\\
     Same thing as fwrite, just reading. Oh right, did you know that when you read long, it's stored in reverse order? Damn like it should totally be on the exam because no one will get it right.
     \item One more tip: If you want to know the offset of the struct you just read, do
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
         \item ftell(fp) / sizeof(struct example) - 1;
     \end{algorithmic}
 \end{itemize}
@@ -187,38 +215,38 @@ Size of struct example is 16 bytes (in 64 bit system). Remember that the size of
 
 \subsection{Bitfields}
 You can create fields within struct that do not contain round number of bits.
-\begin{algorithmic}
-    \item  struct my\_bitfields \{\\
-        $\indent$ unsigned int sign: 1;\\
-        $\indent$ unsigned int exp: 11;\\
-        \};
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    struct my_bitfields {
+        unsigned int sign: 1;
+        unsigned int exp: 11;
+    };
+\end{lstlisting}
 Have no clue why this is useful.
 
 \subsection{Union}
 Declare just like struct
-\begin{algorithmic}
-    \item union my\_union \{\\
-        $\indent$ int combined\_bytes;\\
-        $\indent$ char four\_bytes[4];\\
-    \};
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    union my_union {
+        int combined_bytes;
+        char four_bytes[4];
+    };
+\end{lstlisting}
 If you don't specify, it assumes that you're initializing the first field. C99 has designated initializer. 
-\begin{algorithmic}
-    \item union my\_union my\_var = \{ .four\_bytes = \{ a, b, c, d \} \};
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    union my_union my_var = { .four_bytes = { a, b, c, d} };
+\end{lstlisting}
 
 \subsection{Enum}
 Attaching a label to a value. You can either assign a value or not. \textbf{Not semicolon, use commas}.
-\begin{algorithmic}
-    \item enum color \{\\
-        $\indent$ TEAL,\\
-        $\indent$ TURQUOISE = 4,\\
-    \};
-    \item enum color my\_fav\_color = TURQUOISE;
-    \item enum color my\_2nd\_fav = TEAL;
-    \item printf("My fav color is \%d$\backslash$n", TURQUOISE); /* Will print out 4 */
-\end{algorithmic}
+\begin{lstlisting}[style=CStyle]
+    enum color {
+        TEAL,
+        TURQUOISE = 4,
+    };
+    enum color my_fav_color = TURQUOISE;
+    enum color my_2nd_fav = TEAL;
+    printf("My fav color is \%d\n", TURQUOISE); /* Will print out 4 */
+\end{lstlisting}
 
 \subsection{Bitwise Operators}
 I know this doesn't belong here but I hate it and didn't want to give it a new section.
@@ -226,9 +254,9 @@ I know this doesn't belong here but I hate it and didn't want to give it a new s
     \item \& $\mid$ \^{} $\sim$
     \item Shift operator $\ll$ $\gg$\\
     Every shift left is equivalent to multiplication by two.
-    \begin{algorithmic}
-        \item y = x $\ll$ 4 /* Equivalent to y = x * $2^4$ */
-    \end{algorithmic}
+    \begin{lstlisting}[style=CStyle]
+        y = x << 4 /* Equivalent to y = x * 2^4 */
+    \end{lstlisting}
 \end{itemize}
 
 \end{document}
