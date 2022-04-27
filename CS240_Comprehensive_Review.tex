@@ -75,6 +75,12 @@ It's portable, fast, and simple, so screw you Javascript.
     \item \textit{-ANSI} Adhere to ANSI std
     \item \textit{-std=C99} Adhere to C99 std
 \end{itemize}
+Typical homework gcc commands:
+\begin{lstlisting}[style=BashStyle]
+    $ gcc -Wall -Werror -std=c17 -c hwx.c
+    $ gcc -Wall -Werror -std=c16 -c hwx_main.c
+    $ gcc -o hwx_main hwx_main.o hwx.c
+\end{lstlisting}
 
 \subsection{Linking}
 Object file contains binary code, symbol tables, and is a compiled form of a C module.
@@ -276,12 +282,12 @@ I know this doesn't belong here but I hate it and didn't want to give it a new s
     \item Arrays are equivalent to pointer (not the other way around), and ptr can be used as arrays.
     \item Differences are
     \begin{itemize}
-        \item You cannot assign something new to array unlike ptr.
+        \item \textbf{You cannot assign something new to array unlike ptr.}
         \begin{lstlisting}[style=CStyle]
             ptr = arr; /* allowed */
             arr = ptr; /* NOT allowed */
         \end{lstlisting}
-        \item Array definition allocates memory for every elements in the array, whereas you need to dynamically allocate memory for a var that ptr points to (ptr itself is allocated; 8 bytes).
+        \item \textbf{Array definition allocates memory for every elements in the array}, whereas you need to dynamically allocate memory for a var that ptr points to (ptr itself is allocated; 8 bytes).
     \end{itemize}
 \end{itemize}
 
@@ -292,7 +298,7 @@ You can move around the array using arithmetic on ptr.
     int *ptr = arr; /* Points to the 1st element in the arr - 1 */
     ptr = &arr[1]; /* Now points to the 2nd element in the arr - 2 */
     ptr++; /* Points to the 3rd element - 3 */
-    ptr += 3; /* Points 6th element - 0 - Remember uninitialized elements are 0 */
+    ptr += 3; /* Points to 6th element - 0 - Remember uninitialized elements are 0 */
 \end{lstlisting}
 
 \section{GDB}
@@ -303,5 +309,18 @@ You can move around the array using arithmetic on ptr.
     (gdb) bt # Backtrace the crash point
     (gdb) quit
 \end{lstlisting}
+
+\section{Linked List and Dynamic Memory Allocation}
+
+\subsection{$\rightarrow$ Operator}
+\begin{lstlisting}[style=CStyle]
+    struct my_data my_var = { 19 };
+    struct my_data *my_ptr = &my_var;
+    printf("%d\n", (*my_ptr).age); /* Will print 19 */
+    printf("%d\n", my_ptr->age); /* Will also print 19! */
+\end{lstlisting}
+Be aware that (*ptr)-\textgreater age and *ptr-\textgreater age (Which is the same as *(ptr-\textgreater age)) are different.
+
+\subsection{malloc() and free()}
 
 \end{document}
