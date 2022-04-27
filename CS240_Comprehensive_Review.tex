@@ -1,6 +1,5 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage{algpseudocode}
 \usepackage{soul}
 \usepackage{bookman}
 
@@ -31,6 +30,16 @@
     language=C
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Bash lstlisting %%%%%
+\definecolor{turquoise}{rgb}{0.175,238,238}
+\lstdefinestyle{BashStyle}{
+    backgroundcolor=\color{turquoise},
+    showstringspaces=false,
+    commentstyle=\color{red},
+    keywordstyle=\color{blue},
+    language=bash
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \topmargin=-0.45in
 \evensidemargin=0in
@@ -109,11 +118,11 @@ To make it a complete executable, one must link object files, with one of them c
         \item SEEK\_END: Offset relative to the end of the file
     \end{itemize}
     \item Example of finding how long the file is:
-    \begin{algorithmic}[1]
-        \item fseek(fp, 0, SEEK\_END);
-        \item int len = ftell(fp);
-        \item fseek(fp, 0, SEEK\_SET);
-    \end{algorithmic}
+    \begin{lstlisting}[style=CStyle]
+        fseek(fp, 0, SEEK_END);
+        int len = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+    \end{lstlisting}
 \end{itemize}
 
 \section{Struct and Typedef}
@@ -183,7 +192,7 @@ In C99, you can do it all at once with compound literal.
 \end{itemize}
 
 \subsection{Memory Map}
-Take the L
+Cry.
 
 \subsection{Padding}
 Structure is padded in C when smaller size variable is followed by bigger size variable. 
@@ -206,9 +215,9 @@ Size of struct example is 16 bytes (in 64 bit system). Remember that the size of
     \item \textbf{int fread(void *ptr, int size, int num, FILE *fp);}\\
     Same thing as fwrite, just reading. Oh right, did you know that when you read long, it's stored in reverse order? Damn like it should totally be on the exam because no one will get it right.
     \item One more tip: If you want to know the offset of the struct you just read, do
-    \begin{algorithmic}[1]
-        \item ftell(fp) / sizeof(struct example) - 1;
-    \end{algorithmic}
+    \begin{lstlisting}[style=CStyle]
+        ftell(fp) / sizeof(struct example) - 1;
+    \end{lstlisting}
 \end{itemize}
 
 \section{Struct Wannabes}
@@ -258,5 +267,41 @@ I know this doesn't belong here but I hate it and didn't want to give it a new s
         y = x << 4 /* Equivalent to y = x * 2^4 */
     \end{lstlisting}
 \end{itemize}
+
+\section{Pointer Pointer Pointer!}
+\& Operator is used to determine the address of an element. * operator is used to manipulate the contents at the address of a variable.
+
+\subsection{Array and Pointer (They are the samething)}
+\begin{itemize}
+    \item Arrays are equivalent to pointer (not the other way around), and ptr can be used as arrays.
+    \item Differences are
+    \begin{itemize}
+        \item You cannot assign something new to array unlike ptr.
+        \begin{lstlisting}[style=CStyle]
+            ptr = arr; /* allowed */
+            arr = ptr; /* NOT allowed */
+        \end{lstlisting}
+        \item Array definition allocates memory for every elements in the array, whereas you need to dynamically allocate memory for a var that ptr points to (ptr itself is allocated; 8 bytes).
+    \end{itemize}
+\end{itemize}
+
+\subsection{Pointer Arithmetic}
+You can move around the array using arithmetic on ptr.
+\begin{lstlisting}[style=CStyle]
+    int arr[10] = { 1, 2, 3, 4, 5 };
+    int *ptr = arr; /* Points to the 1st element in the arr - 1 */
+    ptr = &arr[1]; /* Now points to the 2nd element in the arr - 2 */
+    ptr++; /* Points to the 3rd element - 3 */
+    ptr += 3; /* Points 6th element - 0 - Remember uninitialized elements are 0 */
+\end{lstlisting}
+
+\section{GDB}
+\begin{lstlisting}[style=BashStyle]
+    $ gcc -g debugging.c -o debugging # Don't forget -g flag
+    $ gdb debugging
+    (gdb) run
+    (gdb) bt # Backtrace the crash point
+    (gdb) quit
+\end{lstlisting}
 
 \end{document}
