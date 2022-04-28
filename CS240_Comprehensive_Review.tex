@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{soul}
-\usepackage{bookman}
+\usepackage{utopia}
 
 % https://tex.stackexchange.com/questions/348651/c-code-to-add-in-the-document %
 \usepackage{xcolor}
@@ -57,9 +57,9 @@
 \maketitle
 
 \section{Basics}
-\st{C was developed by our lord Turkstra in 1678.}\\
-Created by Dennis Ritchie in 1969 (nice) - 1973 at Bell Lab, with a desire to make UNIX portable unlike assembly.
-It's portable, fast, and simple, so screw you Javascript.
+\st{C was developed by Lord Turkstra in 1678.}\\
+Created by Dennis Ritchie in 1969 - 1973 at Bell Lab, with a desire to make UNIX portable unlike assembly.
+It's portable, fast, simple, and still widely used, so screw you Javascript.
 
 
 \section{Compiling and Linking}
@@ -78,7 +78,7 @@ It's portable, fast, and simple, so screw you Javascript.
 Typical homework gcc commands:
 \begin{lstlisting}[style=BashStyle]
     $ gcc -Wall -Werror -std=c17 -c hwx.c
-    $ gcc -Wall -Werror -std=c16 -c hwx_main.c
+    $ gcc -Wall -Werror -std=c17 -c hwx_main.c
     $ gcc -o hwx_main hwx_main.o hwx.c
 \end{lstlisting}
 
@@ -319,8 +319,140 @@ You can move around the array using arithmetic on ptr.
     printf("%d\n", (*my_ptr).age); /* Will print 19 */
     printf("%d\n", my_ptr->age); /* Will also print 19! */
 \end{lstlisting}
-Be aware that (*ptr)-\textgreater age and *ptr-\textgreater age (Which is the same as *(ptr-\textgreater age)) are different.
+Be aware that (*ptr)-\textgreater age and *ptr-\textgreater age (which is the same as *(ptr-\textgreater age)) are different.
 
-\subsection{malloc() and free()}
+\subsection{malloc(), calloc(), and free()}
+malloc(int size) allocates a memory in the heap memory region. free(void *ptr) frees the region allocated in the heap.
+calloc(int n, int s) allocates n chunks of memory of size s and set all the bytes to 0.
+\begin{itemize}
+    \item \textbf{Always check return value of malloc (pointer) using assert}.
+    \item \textbf{Always set the ptr to NULL after free}.
+    \item Rule of thumb is that you malloc for any non-array pointers.
+    \begin{lstlisting}[style=CStyle]
+        typedef struct my_data {
+            char str1[5];
+            char *str2;
+            int integer;
+        } my_data_t;
+
+        my_data_t *make(char *my_str1, char *my_str2, int my_integer) {
+            my_data_t *my_var = malloc(sizeof(my_data_t));
+            assert(my_var != NULL);
+
+            assert(strlen(str1) <= 4); /* Arr w/ fixed size; no malloc needed, but make sure its length is 4 at max */
+            strcpy(my_var->str1, my_str1);
+            my_var->str1[4] = '\0';
+
+            my_var->str2 = malloc(strlen(my_str2) + 1); /* Pure ptr, malloc strlen + NUL */
+            strcpy(my_var->str2, my_str2);
+
+            my_var->integer = my_integer; /* Fixed 4 bytes, no malloc needed */
+
+            return my_var;
+        }
+    \end{lstlisting}
+    \item \textbf{Do not return address of something that is stack allocated!} Only return the ptr to dynamically allocated var.
+\end{itemize}
+
+\subsection{Linked List}
+\begin{lstlisting}[style=CStyle]
+    struct node {
+        int val;
+        struct node *next;
+    } nt;
+\end{lstlisting}
+
+\begin{itemize}
+    \item Adding an element to the head
+    \begin{lstlisting}[style=CStyle]
+        nt *add_head(nt *head, nt *element) {
+            /* Treat 2nd element as the new head */
+            element->next = head;
+            return element;
+    \end{lstlisting}
+    \item Adding an element to the tail
+    \begin{lstlisting}[style=CStyle]
+        nt *add_tail(nt *head, nt *element) {
+            if (head == NULL) {
+                return element;
+            }
+            nt *head_archive = head;
+            /* Traversing the list to find tail */
+            while (head->next != NULL) {
+                head = head->next;
+            }
+            head->next = element;
+            return head_archive;
+        }
+    \end{lstlisting}
+    \item Deleting an entire list
+    \begin{lstlisting}[style=CStyle]
+        void delete(nt *head) {
+            nt *temp = head;
+            while (head != NULL) {
+                temp = head->next;
+                free(head);
+                head = temp;
+            }
+        }
+    \end{lstlisting}
+\end{itemize}
+
+\subsection{Valgrind}
+Is useful to identify leaks and errors
+\begin{lstlisting}[style=BashStyle]
+    $ valgrind ./executable
+    $ valgrind --leak-check=full ./executable
+\end{lstlisting}
+
+\section{Doubly Linked List and Pointer to Pointer}
+
+\subsection{DLL}
+\begin{lstlisting}[style=CStyle]
+    struct double_node {
+        int val;
+        struct double_node *prev;
+        struct double_node *next;
+    } dnt;
+\end{lstlisting}
+\begin{itemize}
+    \item Prepend
+    \begin{lstlisting}[style=CStyle]
+        void prepend(dnt *list_element, dnt *element) {
+            if (list_element->prev != NULL) {
+                list_element->prev->next = element;
+            }
+            element->prev = list_element->prev;
+            element->next = list_element;
+            list_element->prev = element;
+        }
+    \end{lstlisting}
+    \item Append
+    \begin{lstlisting}[style=CStyle]
+        void append(dnt *list_element, dnt *element) {
+            if (list_element->next != NULL) {
+                list_element->next->prev = element;
+            }
+            element->next = list_element->next;
+            element->prev = list_element;
+            list_element->next = element;
+        }
+    \end{lstlisting}
+    \item Remove an element
+    \begin{lstlisting}[style=CStyle]
+        void remove(dnt *element) {
+            if (element->next != NULL) {
+                element->next->prev = element->prev;
+            }
+            if (element->prev != NULL) {
+                element->prev->next = element->next;
+            }
+            /* Free the struct or simply set prev and next to NULL */
+        }
+    \end{lstlisting}
+
+\end{itemize}
+
+\subsection{Ptr 2 Ptr}
 
 \end{document}
