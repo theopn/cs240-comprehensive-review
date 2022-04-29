@@ -201,7 +201,7 @@ In C99, you can do it all at once with compound literal.
 Cry.
 
 \subsection{Padding}
-Structure is padded in C when smaller size variable is followed by bigger size variable. 
+Structure is padded in C when smaller size variable is followed by bigger size variable.\\
 Padding of sizeof(bigger\_var) - sizeof(smaller\_var) will be added in between for a faster access.
 \begin{lstlisting}[style=CStyle]
     struct example {
@@ -248,7 +248,7 @@ Declare just like struct
 \end{lstlisting}
 If you don't specify, it assumes that you're initializing the first field. C99 has designated initializer. 
 \begin{lstlisting}[style=CStyle]
-    union my_union my_var = { .four_bytes = { a, b, c, d} };
+    union my_union my_var = { .four_bytes = { a, b, c, d } };
 \end{lstlisting}
 
 \subsection{Enum}
@@ -356,7 +356,7 @@ calloc(int n, int s) allocates n chunks of memory of size s and set all the byte
 
 \subsection{Linked List}
 \begin{lstlisting}[style=CStyle]
-    struct node {
+    typedef struct node {
         int val;
         struct node *next;
     } nt;
@@ -409,7 +409,7 @@ Is useful to identify leaks and errors
 
 \subsection{DLL}
 \begin{lstlisting}[style=CStyle]
-    struct double_node {
+    typedef struct double_node {
         int val;
         struct double_node *prev;
         struct double_node *next;
@@ -447,7 +447,10 @@ Is useful to identify leaks and errors
             if (element->prev != NULL) {
                 element->prev->next = element->next;
             }
-            /* Free the struct or simply set prev and next to NULL */
+            element->prev = NULL;
+            element->next = NULL;
+            free(element);
+            element = NULL;
         }
     \end{lstlisting}
 
