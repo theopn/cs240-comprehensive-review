@@ -405,7 +405,7 @@ Is useful to identify leaks and errors
     $ valgrind --leak-check=full ./executable
 \end{lstlisting}
 
-\section{Doubly Linked List and Pointer to Pointer}
+\section{Doubly Linked List, Pointer to Pointer, and Other Ptr Related Stuffs}
 
 \subsection{DLL}
 \begin{lstlisting}[style=CStyle]
@@ -457,5 +457,57 @@ Is useful to identify leaks and errors
 \end{itemize}
 
 \subsection{Ptr 2 Ptr}
+When passing a pointer to a function, you are passing it by a value, not by reference. Thus, you have to pass a pointer to pointer if you want the changes in the function to be reflected in the function that it was called.
+\begin{itemize}
+    \item Creating a DLL node (single ptr version)
+    \begin{lstlisting}[style=CStyle]
+        dnt *create(int my_val) {
+            dnt *new_node = malloc(sizeof(dnt));
+            assert(new_node != NULL);
+            new_node->val = my_val;
+            return new_node;
+        }
+    \end{lstlisting}
+    \item Creating a DLL node (double ptr version)
+    \begin{lstlisting}[style=CStyle]
+        void create(int my_var, dnt **make_it_pt_here_plz) {
+            dnt *new_node = malloc(sizeof(dnt));
+            assert(new_node != NULL);
+            new_node->val = my_val;
+            *make_it_pt_here_plz = new_node;
+        }
+    \end{lstlisting}
+\end{itemize}
+
+\subsection{Faces of Zero}
+\begin{itemize}
+    \item 0 as an int
+    \item 0x0 in hexadecimal
+    \item '$\backslash$0' NUL terminator
+    \item 0.0 float val
+    \item NULL == ((void *)0)
+\end{itemize}
+
+\subsection{Function Pointer}
+Lesser useful example:
+\begin{lstlisting}[style=CStyle]
+    int multiplication(int val1, int val2) {
+        return val1 * val2;
+    }
+    int main {
+        int (*func_ptr)(int, int) = NULL;
+        func_ptr = multiplication;
+        int result = func_ptr(1, 2); /* Or (*func_ptr)(1, 2) */
+        printf("%d\n", result)
+    }
+\end{lstlisting}
+More useful example; passing it as an arg:
+\begin{lstlisting}[style=CStyle]
+    int struct_val_multiply(dnt *my_struct, int my_val, 
+                            int (*multiplication_ptr)(int, int)) {
+        return multiplication_ptr((my_struct->val), my_val);
+        /* Ik it's a bad example */
+    }
+\end{lstlisting}
 
 \end{document}
