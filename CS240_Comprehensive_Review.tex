@@ -101,7 +101,7 @@ To make it a complete executable, one must link object files, with one of them c
     \item int feof(FILE *file\_pointer);\\
     Returns non-zero if EOF reached.
     \item int ferror(FILE *file\_pointer);\\
-    Returns 0 if error occurs (e.g disk space full).
+    Returns non-zero if error occurs (e.g disk space full).
 \end{itemize}
 
 \subsection{Notes with fscanf()}
@@ -521,5 +521,37 @@ More useful example; passing it as an arg:
         /* Ik it's a bad example. Just remember the syntax */
     }
 \end{lstlisting}
+
+\subsection{Recursion}
+Function calls are stored in stack memory.\\
+Thus iterative implemnentation is often more efficient, resursive implemnentation is often more convenient.
+\begin{lstlisting}[style=CStyle]
+    int fibonacci(int n) {
+        if (n == 0) return 1;
+        if (n == 1) return 1;
+        return (fibonacci(n-1) + fibonacci(n-2));
+    }
+\end{lstlisting}
+Don't forget to have a base case!
+
+\section{Tree}
+\begin{lstlisting}[style=CStyle]
+    typedef struct node {
+        int val;
+        struct node *left;
+        struct node *right;
+    } tree_node;
+\end{lstlisting}
+
+\subsection{Tree Traversal}
+\begin{itemize}
+    \item \textbf{Inorder: L-Node-R; Least to Greatest}.
+    \item Reverse: R-Node-L; Greatest to Least.
+    \item \textbf{Prefix: Node-L-R}.
+    \item \textbf{Postfix: L-R-Node}.
+\end{itemize}
+
+\subsection{Dynamic 2D Array}
+I got a headache.
 
 \end{document}
