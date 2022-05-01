@@ -150,7 +150,7 @@ To make it a complete executable, one must link object files, with one of them c
 \end{itemize}
 
 \subsection{Declaration vs Definition}
-Declaration is announcing the properties of var (no memory allocation), definition is allocating storages for a var.
+\textbf{Declaration is announcing the properties of var (no memory allocation), definition is allocating storages for a var}.
 \begin{itemize}
     \item Declaration:
     \begin{lstlisting}[style=CStyle]
@@ -553,5 +553,71 @@ Don't forget to have a base case!
 
 \subsection{Dynamic 2D Array}
 I got a headache.
+
+\section{Type}
+
+\subsection{First-Class Types}
+You can assign any first-class types to each other, unlike second-class types where only the same types are compitable.
+\begin{itemize}
+    \item void
+    \item char
+    \item short
+    \item int
+    \item float
+    \item long
+    \item double
+    \item long long
+\end{itemize}
+
+\subsection{Type Modifiers and Qualifiers}
+\begin{itemize}
+    \item Integer type (char, short, int, long, long long) can have \textbf{signed or unsigned modifier}.
+    \item \textbf{Volatile qualifier means that the datum can be modified by something outside of the program}.
+    \item \textbf{Const qualifier means that datum cannot be modified}
+    \begin{itemize}
+        \item \begin{lstlisting}[style=CStyle]
+        const int *ptr; /* Ptr can be modified, val cannot be modified */
+        int * const ptr; /* Ptr cannot be modified, val can be modified */
+        \end{lstlisting}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Storage Classes}
+\begin{itemize}
+    \item \textbf{Extern: Signifies that the dataum is definied in some other module}. 
+    Use it for an application with multiple C files accessing the same global var, defined it only in one file and use extern in other files.
+    \item Static (Local var.): The datum is initialized only once and retains its value between invocations of the func.
+    \item Static (Global var.): The datum is not visible by other module.
+\end{itemize}
+
+\section{Preprocessor}
+
+\subsection{\#include}
+Pulls header file into another file (literally copy and paste).
+\begin{lstlisting}[style=CStyle]
+    #include "something.h" /* Header file from the same directory */
+    #include <something.h> /* From /usr/include */
+\end{lstlisting}
+
+\subsection{\#define}
+\begin{lstlisting}[style=CStyle]
+    #define TESTING
+    int main() {
+        int a = 0;
+        #ifdef TESTING
+        a = 10;
+        #else
+        scanf("%d", &a);
+        #endif
+    }
+\end{lstlisting}
+\begin{lstlisting}[style=CStyle]
+    #define ABS(x) ( (x) < 0 ? -(x) : (x) )
+\end{lstlisting}
+\begin{itemize}
+    \item Macros are replaced by compiler, so it's more efficient.
+    \item Macros can take arguments of any time, so it's more flexible.
+    \item \textbf{Make sure to have parenthesis around variables to make them "safer"!!! (More than one digit, etc)}
+\end{itemize}
 
 \end{document}
