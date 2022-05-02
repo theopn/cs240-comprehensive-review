@@ -211,9 +211,8 @@ Padding of sizeof(bigger\_var) - sizeof(smaller\_var) will be added in between f
 \begin{lstlisting}[style=CStyle]
     struct example {
         char a; /* 1 bytes */
-        /* 1 byte padding */
         char b; /* 1 bytes */
-        /* 1 byte padding */
+        /* 2 byte padding */
         int c; /* 4 bytes */
         struct example *next; /* 8 bytes */
     };
