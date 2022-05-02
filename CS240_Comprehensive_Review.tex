@@ -590,6 +590,26 @@ You can assign any first-class types to each other, unlike second-class types wh
     \item Static (Global var.): The datum is not visible by other module.
 \end{itemize}
 
+\subsection{Cast and Void Type}
+\begin{lstlisting}[style=CStyle]
+    int *i_arr = malloc(sizeof(int) * 2);
+    char *c_ptr = (char *) i_arr;
+    int *i_ptr = (int *) c_ptr;
+    i_ptr[0] = 7;
+    /* Will this work? */
+\end{lstlisting}
+You can complicate casting syntax as well.
+\begin{lstlisting}[style=CStyle]
+    s = (const struct example * const *) ss;
+\end{lstlisting}
+Void types are used when data types are unknown. 
+Its application include callback, which utilizes void pointer to generalize func and accept various func pointers.
+\begin{lstlisting}[style=CStyle]
+    void callback_func(void (*callback)(void *), void *callback_val) {
+        callback(callback_val);
+    }
+\end{lstlisting}
+
 \section{Preprocessor}
 
 \subsection{\#include}
