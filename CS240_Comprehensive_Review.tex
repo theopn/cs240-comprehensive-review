@@ -716,7 +716,57 @@ Computer cannot generate random-number. Only ones that seem random.
 
 \section{Graphical Programming}
 \begin{itemize}
-    \item 
+    \item Simple DirectMedia Layer
+    \item Initialization: int SDL\_Init(Unit32 flags);\\
+    SDL\_Surface *SDL\_SetVideoMode(int width, int height, int bpp, Unit32 flags);
+    \item Input: int SDL\_PollEvent(SLD\_Event *event); Returns 1 if pending events.
+    \item Snapshot of current keyboards state: Unit8 *SDL\_GetKeyState(int *numkeys); 1 key pressed, 0 not
+    \item \textbf{SDL\_Surface: Represents areas of graphical memory that can be drawn to}.
+    \item Load an image: SDL\_Surface *SDL\_LoadBMP(const char *file);
+    \item \textbf{SDL\_Rect: Rectangular area}. Why did I bold this
 \end{itemize}
+
+\section{Security}
+
+\subsection{Buffer Overflow}
+Scary
+
+\subsection{\st{ASMR} ASLR}
+Changes the address of program for every execution
+\begin{lstlisting}[style=BashStyle]
+    $ setarch -R executable
+\end{lstlisting}
+
+\subsection{System Call}
+\textbf{System calls are the interface b/w processes and OS kernel}.\\
+On x86\_64 systems, syscall instruction is used to initiate a system call.\\
+Utilize open() and close() func. \textbf{Not closing fd result in file descriptor leak}.
+
+\subsection{Reading Stack Dump}
+Remind me to complete this later
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\section{Makefile}
+\begin{lstlisting}[style=BashStyle]
+    # Compiling three files example.c, examplefunc.c, example.h
+    # USE \t instead of space!
+    CC=gcc
+    CFLAGS=-I. # So that gcc will look into current directory
+    DEPS = example.h
+    OBJ = example.o examplefunc.c
+
+    %.o: %.c $(DEPS) # Equivalent to "example: example.o examplefunc.o"
+        # $< - 1st item in the DEPS; 
+        $(CC) -c -o $@ $< $(CFLAGS) 
+    example: $(OBJ)
+        # $@ - left of : i.e %.o; $^ - right of : i.ie %.c
+        $(CC) -o $@ $^ $(CFLAGS)
+    
+    .PHONY: clean # Let Makefile know to ignore filename "clean"
+    clean:
+        rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+\end{lstlisting}
 
 \end{document}
