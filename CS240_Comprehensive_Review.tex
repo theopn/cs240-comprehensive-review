@@ -744,7 +744,10 @@ On x86\_64 systems, syscall instruction is used to initiate a system call.\\
 Utilize open() and close() func. \textbf{Not closing fd result in file descriptor leak}.
 
 \subsection{Reading Stack Dump}
-Remind me to complete this later
+Rules of thumb:
+\begin{itemize}
+    \item 
+\end{itemize}
 \begin{lstlisting}
 
 \end{lstlisting}
@@ -752,7 +755,7 @@ Remind me to complete this later
 \section{Makefile}
 \begin{lstlisting}[style=BashStyle]
     # Compiling three files example.c, examplefunc.c, example.h
-    # USE \t instead of space!
+    # Use \t instead of space!
     CC=gcc
     CFLAGS=-I. # So that gcc will look into current directory
     DEPS = example.h
@@ -762,13 +765,15 @@ Remind me to complete this later
         # $< - 1st item in the DEPS; 
         $(CC) -c -o $@ $< $(CFLAGS) 
     example: $(OBJ)
-        # $@ - left of : i.e %.o; $^ - right of : i.ie %.c
+        # $@ - left of : / the target i.e %.o
+        # $^ - right of : / all the dependency files i.e $(OBJ)
         $(CC) -o $@ $^ $(CFLAGS)
     
     .PHONY: clean # Let Makefile ignore filename "clean"
     clean:
         rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
 \end{lstlisting}
+Use touch command to update the file date.
 
 \section{Bubble Sort}
 Real programmers use xor for bubble sort. If you use temporary variable and waste precious 4 bytes of memory, maybe you should consider just giving up CS. $\backslash$s
@@ -794,6 +799,23 @@ Real programmers use xor for bubble sort. If you use temporary variable and wast
     \item IP (Internet protocol): An addressing and fragmentation protocol. Inherently unreliable.
     \item \textbf{DNS (Domain Name System): Distributed system that resolves host names to IP address}.
     \item TCP (Transmission Control Protocol): TCP builds on IP to create a reliable network connection.
+\end{itemize}
+
+\subsection{Server}
+\begin{itemize}
+    \item \textbf{socket(): Create and endpoint.}
+    \item \textbf{bind(): Assigning a name to the socket.}
+    \item \textbf{listen(): Marks socket as passive and accept incoming connections.}
+    \item \textbf{accept(): Removes the 1st connection request from pending connection queue.}
+    \item recv(), send()
+    \item close()
+\end{itemize}
+
+\subsection{Client}
+\begin{itemize}
+    \item \textbf{socket()}
+    \item \textbf{bind()}
+    \item \textbf{connect(): Connects socket to the address.}
 \end{itemize}
 
 \end{document}
