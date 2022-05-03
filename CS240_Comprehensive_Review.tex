@@ -70,7 +70,7 @@ It's portable, fast, simple, and still widely used, so screw you Javascript.
     \item \textit{-g} Debugging symbols
     \item \textbf{\textit{-Wall}} Include ALL Warning
     \item \textbf{\textit{-Werror}} Turn wanings into errors
-    \item \textbf{\textit{-O1, -O2, -O3}} Optimize output code (O3 will make the file bigger)
+    \item \textbf{\textit{-O1, -O2, -O3}} Optimize output code (O3 will make the file bigger; more in 14.1)
     \item \textbf{\textit{-o filename}} Output to filename
     \item \textit{-ansi} Adhere to ANSI std
     \item \textit{-std=c99} Adhere to C99 std
@@ -632,6 +632,7 @@ Pulls header file into another file (literally copy and paste).
         #else
         scanf("%d", &a);
         #endif
+        printf("a: %d\n", a); /* Will print out 10 since TESTING is defined */
     }
 \end{lstlisting}
 \begin{lstlisting}[style=CStyle]
@@ -641,6 +642,81 @@ Pulls header file into another file (literally copy and paste).
     \item Macros are replaced by compiler, so it's more efficient.
     \item Macros can take arguments of any time, so it's more flexible.
     \item \textbf{Make sure to have parenthesis around variables to make them "safer"!!! (More than one digit, etc)}
+\end{itemize}
+
+\section{Efficiency Issues and Libraries}
+
+\subsection{Compiler Efficiency}
+\begin{itemize}
+    \item -O/-O1 tries to register var and compare multiple lines for efficiency
+    \item -O2 Optimize w/o generating longer code
+    \item -O3 Func inlining, loop unrolling, etc
+\end{itemize}
+
+\subsection{Coding Efficiency}
+\begin{itemize}
+    \item \textbf{Use local var if the data is used more than once.}
+    \item Use macros instead of short func.
+    \item Use register var.
+    \item Calculate out of the loop if possible.
+\end{itemize}
+
+\subsection{Data Access Efficiency}
+Reuse allocated memory!
+
+\subsection{Static Libraries}
+\begin{itemize}
+    \item \textbf{Static library become a part of executable (needs to be recompiled if changed)}.
+    \item When linking, missing symbols are searched in the libaries. Object files with missing symbols are linked.
+\end{itemize}
+\begin{lstlisting}[style=BashStyle]
+    $ gcc -c file1.c
+    $ gcc -c file2.c
+    $ ar -crv libmy_library.a file1.o file2.o # UNIX Specific
+    $ gcc -o my_program main.c -L. -lmy_library # -L. means search for . dir
+\end{lstlisting}
+
+\subsection{Dynamic Libraries}
+\begin{itemize}
+    \item \textbf{Dynamic libraries are loaded on the startup and runtime; no recompile needed}
+\end{itemize}
+\begin{lstlisting}[style=BashStyle]
+    $ gcc -c -fPIC file1.c
+    $ gcc -c -fPIC file2.c
+    $ gcc file1.o file2.o -shared -o libmy_library.so
+    $ gcc -o my_program main.c -L. -lmy_library # -L. means search for . dir
+\end{lstlisting}
+
+\subsection{Bottom Line}
+\begin{itemize}
+    \item Library is efficient; it's faster to link one library with 1000 object files than 1000 object files.
+    \item Declare one data struct per file
+    \item Don't use unnecessary \#include
+    \item \#include only once (Will create "duplicate declaration" error). \textbf{Utilize Include Guard}.
+    \begin{lstlisting}[style=CStyle]
+    #ifndef HEADER_H /* Check if this macro has been created already */
+    #define HEADER_H /* If not, define it */
+    /* Header file contents... */
+    #endif /* HEADER_H - Macro can be named to anything */
+    \end{lstlisting}
+\end{itemize}
+
+\section{"Random" Number}
+Computer cannot generate random-number. Only ones that seem random.
+\begin{lstlisting}[style=CStyle]
+    #include <stdlib.h>
+    #include <time.h>
+    int main() {
+        srandom(time(0)); /* Feed the seed */
+        int x = 3;
+        int y = 5;
+        int rand = x + random() % (y - x + 1); /* Rand num b/w 3 - 5 */
+    }
+\end{lstlisting}
+
+\section{Graphical Programming}
+\begin{itemize}
+    \item 
 \end{itemize}
 
 \end{document}
