@@ -770,7 +770,7 @@ Rules of thumb:
         int var = 0xaaaaaaaa;
     }
     int main() {
-        hello(0xbbbbbbbb);
+        func(0xbbbbbbbb);
     }
     0x7ffc4a8bee88: a8 ef 8b 4a cf 7f 00 00
     0x7ffc4a8bee80: c0 ef 4b 5c 10 7f 00 00
@@ -790,13 +790,16 @@ Rules of thumb:
     DEPS = example.h
     OBJ = example.o examplefunc.c
 
-    %.o: %.c $(DEPS) # Equivalent to "example: example.o examplefunc.o"
-        # $< - 1st item in the DEPS; 
-        $(CC) -c -o $@ $< $(CFLAGS) 
-    example: $(OBJ)
-        # $@ - left of : / the target i.e %.o
-        # $^ - right of : / all the dependency files i.e $(OBJ)
-        $(CC) -o $@ $^ $(CFLAGS)
+    %.o: %.c $(DEPS) # On the right is "target", on the left is "dependency"
+        # $< - 1st item in the DEPS;
+        # $@ - left of : / "target" i.e %.o
+        # $^ right of : / "dependency" i.e %.c $(DEPS)
+        $(CC) -c -o $@ $< $(CFLAGS)
+    example: $(OBJ) # Equivalent to "example: example.o examplefunc.o"
+        # $@ - left of : / "target" i.e example
+        # $^ - right of : / "dependency" i.e $(OBJ)
+        # Equivalent to gcc -o example example.o examplefunc.o -I.
+        $(CC) -o $@ $^ $(CFLAGS) 
     
     .PHONY: clean # Let Makefile ignore filename "clean"
     clean:
