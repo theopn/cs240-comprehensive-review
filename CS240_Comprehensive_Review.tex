@@ -632,6 +632,7 @@ Pulls header file into another file (literally copy and paste).
         #else
         scanf("%d", &a);
         #endif
+
         printf("a: %d\n", a); /* Will print out 10 since TESTING is defined */
     }
 \end{lstlisting}
@@ -732,7 +733,7 @@ Computer cannot generate random-number. Only ones that seem random.
 Scary
 
 \subsection{\st{ASMR} ASLR}
-Changes the address of program for every execution
+Changes the address of program for every execution.
 \begin{lstlisting}[style=BashStyle]
     $ setarch -R executable
 \end{lstlisting}
@@ -764,9 +765,35 @@ Remind me to complete this later
         # $@ - left of : i.e %.o; $^ - right of : i.ie %.c
         $(CC) -o $@ $^ $(CFLAGS)
     
-    .PHONY: clean # Let Makefile know to ignore filename "clean"
+    .PHONY: clean # Let Makefile ignore filename "clean"
     clean:
         rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
 \end{lstlisting}
+
+\section{Bubble Sort}
+Real programmers use xor for bubble sort. If you use temporary variable and waste precious 4 bytes of memory, maybe you should consider just giving up CS. $\backslash$s
+\begin{lstlisting}[style=CStyle]
+    void chad_bubble_sort(int *arr, int size) {
+        for (int k = 0; k < size; k++) {
+            for (int i = 1; i < size; i++) {
+                if (arr[i-1] > arr[i]) {
+                    arr[i-1] ^= arr[i];
+                    arr[i] ^= arr[i-1];
+                    arr[i-1] ^= arr[i];
+                    print_array(...);
+                }
+            }
+        }
+    }
+\end{lstlisting}
+
+\section{Networking}
+
+\subsection{Networking Basics}
+\begin{itemize}
+    \item IP (Internet protocol): An addressing and fragmentation protocol. Inherently unreliable.
+    \item \textbf{DNS (Domain Name System): Distributed system that resolves host names to IP address}.
+    \item TCP (Transmission Control Protocol): TCP builds on IP to create a reliable network connection.
+\end{itemize}
 
 \end{document}
