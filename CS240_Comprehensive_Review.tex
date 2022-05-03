@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{soul}
+\usepackage{fancyhdr}
+\renewcommand{\footrulewidth}{0.4pt}
 \usepackage{utopia}
 
 % https://tex.stackexchange.com/questions/348651/c-code-to-add-in-the-document %
@@ -32,6 +34,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Bash lstlisting %%%%%
 \definecolor{turquoise}{rgb}{0.175,238,238}
+\rfoot{\small{\textit{By Theo Park, based on Dr. Jeff Turkstra's CS240 Slides}}}
 \lstdefinestyle{BashStyle}{
     backgroundcolor=\color{turquoise},
     showstringspaces=false,
@@ -55,6 +58,8 @@
 \begin{document}
 
 \maketitle
+
+\pagestyle{fancy}
 
 \section{Basics}
 \st{C was developed by Lord Turkstra in 1678.}\\
