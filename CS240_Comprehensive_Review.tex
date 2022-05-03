@@ -72,8 +72,8 @@ It's portable, fast, simple, and still widely used, so screw you Javascript.
     \item \textbf{\textit{-Werror}} Turn wanings into errors
     \item \textbf{\textit{-O1, -O2, -O3}} Optimize output code (O3 will make the file bigger)
     \item \textbf{\textit{-o filename}} Output to filename
-    \item \textit{-ANSI} Adhere to ANSI std
-    \item \textit{-std=C99} Adhere to C99 std
+    \item \textit{-ansi} Adhere to ANSI std
+    \item \textit{-std=c99} Adhere to C99 std
 \end{itemize}
 Typical homework gcc commands:
 \begin{lstlisting}[style=BashStyle]
@@ -123,6 +123,10 @@ To make it a complete executable, one must link object files, with one of them c
         \item SEEK\_CUR: Offset relative to the current position
         \item SEEK\_END: Offset relative to the end of the file
     \end{itemize}
+    \item Moving to the 3rd integer in the file
+    \begin{lstlisting}[style=CStyle]
+    fseek(fp, 2 * sizeof(int), SEET_SET); /* Remember 0 is the 1st int */
+    \end{lstlisting}
     \item Example of finding how long the file is:
     \begin{lstlisting}[style=CStyle]
         fseek(fp, 0, SEEK_END);
