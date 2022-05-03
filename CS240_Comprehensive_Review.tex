@@ -765,6 +765,21 @@ Rules of thumb:
     \item \textbf{Spot the local var location, line above is stack ptr, and line above that is return address.}
     \item \textbf{Return addresses are usually short (3 bytes)}
 \end{itemize}
+\begin{lstlisting}[style=BashStyle]
+    void func(int arg) {
+        int var = 0xaaaaaaaa;
+    }
+    int main() {
+        hello(0xbbbbbbbb);
+    }
+    0x7ffc4a8bee88: a8 ef 8b 4a fc 7f 00 00
+    0x7ffc4a8bee80: c0 ef 4b 5c 10 7f 00 00
+    0x7ffc4a8bee78: so me th 00 00 00 00 00 # Return address
+    0x7ffc4a8bee70: b0 ee 8b 4a fc 7f 00 00
+    0x7ffc4a8bee68: 50 b1 4d 5c aa aa aa aa # Local var
+    0x7ffc4a8bee60: 00 00 00 00 00 00 00 00
+    0x7ffc4a8bee58: 86 ee 8b 4a bb bb bb bb # Argument
+\end{lstlisting}
 
 \section{Makefile}
 \begin{lstlisting}[style=BashStyle]
