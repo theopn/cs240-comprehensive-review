@@ -746,11 +746,25 @@ Utilize open() and close() func. \textbf{Not closing fd result in file descripto
 \subsection{Reading Stack Dump}
 Rules of thumb:
 \begin{itemize}
-    \item 
+    \item Layout follows:
+    \begin{tabular}{c}
+        Main return address\\
+        \hline
+        Main frame ptr\\
+        \hline
+        Main variables\\
+        \hline
+        func arg\\
+        \hline
+        func return address\\
+        \hline
+        func frame ptr\\
+        \hline
+        func variables
+    \end{tabular}
+    \item \textbf{Spot the local var location, line above is stack ptr, and line above that is return address.}
+    \item \textbf{Return addresses are usually short (3 bytes)}
 \end{itemize}
-\begin{lstlisting}
-
-\end{lstlisting}
 
 \section{Makefile}
 \begin{lstlisting}[style=BashStyle]
